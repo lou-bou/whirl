@@ -55,7 +55,10 @@ class Filters {
 
   bool matches(Project p, List<Category> categories) {
     if (category.isNotEmpty) {
-      final ids = {for (final c in categories) if (category.contains(c.name)) c.id};
+      final ids = {
+        for (final c in categories)
+          if (category.contains(c.name)) c.id,
+      };
       if (!p.categoryIds.any(ids.contains)) return false;
     }
     if (difficulty.isNotEmpty && !difficulty.contains(p.difficulty)) return false;

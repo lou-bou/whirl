@@ -31,10 +31,10 @@ final _uuid = RegExp(r'^\{?[0-9a-f]{8}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[
 
 String _uuidArg(Object? v) {
   if (v is! String || !_uuid.hasMatch(v)) throw const _Pg('22P02');
-  return v.toLowerCase().replaceAll(RegExp(r'[{}-]'), '').replaceAllMapped(
-    RegExp(r'^(.{8})(.{4})(.{4})(.{4})(.{12})$'),
-    (m) => '${m[1]}-${m[2]}-${m[3]}-${m[4]}-${m[5]}',
-  );
+  return v
+      .toLowerCase()
+      .replaceAll(RegExp(r'[{}-]'), '')
+      .replaceAllMapped(RegExp(r'^(.{8})(.{4})(.{4})(.{4})(.{12})$'), (m) => '${m[1]}-${m[2]}-${m[3]}-${m[4]}-${m[5]}');
 }
 
 /// How `pg` sends a JS value as a text parameter.
@@ -83,7 +83,16 @@ class FakeWhirl {
   final links = <String, List<String>>{};
   final deleted = <String>{};
 
-  static const projectFields = ['name', 'description', 'difficulty', 'dev_type', 'status', 'link', 'has_content', 'notes'];
+  static const projectFields = [
+    'name',
+    'description',
+    'difficulty',
+    'dev_type',
+    'status',
+    'link',
+    'has_content',
+    'notes',
+  ];
 
   // ---------- what the network does ----------
 
@@ -238,7 +247,10 @@ class FakeWhirl {
     final known = _known(_idList(body['categoryIds']));
     final fields = _pick(body, ['id', ...projectFields]);
     if (fields.any((f) => f.$1 == 'id')) _uuidArg(fields.firstWhere((f) => f.$1 == 'id').$2);
-    final values = _columns([for (final f in fields) if (f.$1 != 'id') f], insert: true);
+    final values = _columns([
+      for (final f in fields)
+        if (f.$1 != 'id') f,
+    ], insert: true);
     final key = id ?? _uuidNew();
     if (projects.containsKey(key)) return (200, {'id': rawId});
     final row = <String, Object?>{
@@ -253,14 +265,17 @@ class FakeWhirl {
       'notes': values['notes'],
       'created_at': _iso(t),
       'updated_at': _iso(t),
-      'field_times': {
-        for (final k in projectFields) k: at,
-        for (final c in known) 'cat:$c': at,
-      },
+      'field_times': {for (final k in projectFields) k: at, for (final c in known) 'cat:$c': at},
     };
     projects[key] = row;
     links[key] = [...known];
-    return (201, {..._out(row), 'categoryIds': [...known]});
+    return (
+      201,
+      {
+        ..._out(row),
+        'categoryIds': [...known],
+      },
+    );
   }
 
   (int, Object?) _patchProject(String rawId, Json body) {
@@ -286,11 +301,23 @@ class FakeWhirl {
     } else if (body.containsKey('categoryIds')) {
       final wanted = _idList(body['categoryIds']);
       final current = links[id] ?? const [];
-      add = [for (final w in wanted) if (!current.contains(w)) w];
-      remove = [for (final c in current) if (!wanted.contains(c)) c];
+      add = [
+        for (final w in wanted)
+          if (!current.contains(w)) w,
+      ];
+      remove = [
+        for (final c in current)
+          if (!wanted.contains(c)) c,
+      ];
     }
-    final added = [for (final c in _known(add)) if (_newer(times, 'cat:$c', at)) c];
-    final removed = [for (final c in remove) if (_newer(times, 'cat:$c', at)) c];
+    final added = [
+      for (final c in _known(add))
+        if (_newer(times, 'cat:$c', at)) c,
+    ];
+    final removed = [
+      for (final c in remove)
+        if (_newer(times, 'cat:$c', at)) c,
+    ];
     if (fields.isEmpty && added.isEmpty && removed.isEmpty) return (204, null);
 
     final values = _columns(fields);

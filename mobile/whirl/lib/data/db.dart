@@ -51,17 +51,13 @@ class LocalDb {
 
 /// Writes inside one transaction.
 extension Writes on DatabaseExecutor {
-  Future<void> putProject(Json row) => insert('projects', {
-    'id': row['id'],
-    'data': jsonEncode(row),
-  }, conflictAlgorithm: ConflictAlgorithm.replace);
+  Future<void> putProject(Json row) =>
+      insert('projects', {'id': row['id'], 'data': jsonEncode(row)}, conflictAlgorithm: ConflictAlgorithm.replace);
 
   Future<void> deleteProject(String id) => delete('projects', where: 'id = ?', whereArgs: [id]);
 
-  Future<void> putCategory(Json row) => insert('categories', {
-    'id': row['id'],
-    'data': jsonEncode(row),
-  }, conflictAlgorithm: ConflictAlgorithm.replace);
+  Future<void> putCategory(Json row) =>
+      insert('categories', {'id': row['id'], 'data': jsonEncode(row)}, conflictAlgorithm: ConflictAlgorithm.replace);
 
   Future<void> putQueued(int seq, Json op) =>
       insert('queue', {'seq': seq, 'data': jsonEncode(op)}, conflictAlgorithm: ConflictAlgorithm.replace);

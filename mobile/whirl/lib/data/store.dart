@@ -96,7 +96,9 @@ List<Project> withQueuedChanges(Iterable<Json> server, List<QueuedOp> queue) {
           {...createdRow(op.body!), 'pending': true},
         ];
       case 'PATCH':
-        rows = [for (final r in rows) r['id'] == id ? {...applyChange(r, op.body ?? const {}), 'pending': true} : r];
+        rows = [
+          for (final r in rows) r['id'] == id ? {...applyChange(r, op.body ?? const {}), 'pending': true} : r,
+        ];
       case 'DELETE':
         rows = [
           for (final r in rows)
@@ -246,8 +248,14 @@ class WhirlStore extends Notifier<WhirlData> {
       if (v != _norm(k, before.row[k])) changes[k] = v;
     }
     final had = before.categoryIds;
-    final add = [for (final c in categoryIds) if (!had.contains(c)) c];
-    final remove = [for (final c in had) if (!categoryIds.contains(c)) c];
+    final add = [
+      for (final c in categoryIds)
+        if (!had.contains(c)) c,
+    ];
+    final remove = [
+      for (final c in had)
+        if (!categoryIds.contains(c)) c,
+    ];
     if (add.isNotEmpty || remove.isNotEmpty) {
       changes['addCategoryIds'] = add;
       changes['removeCategoryIds'] = remove;
@@ -284,7 +292,13 @@ class WhirlStore extends Notifier<WhirlData> {
       case 'DELETE':
         server.remove(id);
     }
-    state = state.copyWith(serverProjects: server, queue: [for (final o in state.queue) if (o.seq != op.seq) o]);
+    state = state.copyWith(
+      serverProjects: server,
+      queue: [
+        for (final o in state.queue)
+          if (o.seq != op.seq) o,
+      ],
+    );
     final row = server[id];
     return _persist((tx) async {
       await tx.deleteQueued(op.seq);
@@ -298,7 +312,12 @@ class WhirlStore extends Notifier<WhirlData> {
 
   /// The server refused [op] for good: it leaves the queue and is not retried.
   Future<void> refused(QueuedOp op) {
-    state = state.copyWith(queue: [for (final o in state.queue) if (o.seq != op.seq) o]);
+    state = state.copyWith(
+      queue: [
+        for (final o in state.queue)
+          if (o.seq != op.seq) o,
+      ],
+    );
     return _persist((tx) => tx.deleteQueued(op.seq));
   }
 
@@ -339,6 +358,5 @@ class WhirlStore extends Notifier<WhirlData> {
     });
   }
 }
-
 
 final storeProvider = NotifierProvider<WhirlStore, WhirlData>(WhirlStore.new);
