@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Whirl's page background (src/tokens.css --bg) and the logo colours (DESIGN.md). -->
+    <!-- Whirl's page background (src/tokens.css, bg) and the logo colours (DESIGN.md). -->
     <color name="whirl_bg">#FBF7F0</color>
     <color name="whirl_amber">#F5B82E</color>
     <color name="whirl_coral">#F2613F</color>

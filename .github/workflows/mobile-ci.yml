@@ -1,0 +1,45 @@
+# Checks the phone app on every push to a branch that touches it or the server it talks to.
+# Not on tags: releases run mobile-release.yml, which does the same checks first.
+name: Mobile checks
+
+on:
+  push:
+    branches: ['**']
+    paths:
+      - 'mobile/**'
+      - 'server/index.js'
+      - 'Schema.sql'
+      - '.github/workflows/mobile-*.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: '3.50.0'
+          cache: true
+
+      - name: The fake server still matches server/index.js
+        run: |
+          npm ci
+          npm ci --prefix mobile/whirl/tool
+          node mobile/whirl/tool/record_server.mjs
+          git diff --exit-code mobile/whirl/test/server_recording.json
+
+      - name: Analyze and test the shared package
+        working-directory: mobile/packages/kit
+        run: flutter pub get && flutter analyze && flutter test
+
+      - name: Analyze and test Whirl
+        working-directory: mobile/whirl
+        run: flutter pub get && flutter analyze && flutter test

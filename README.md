@@ -41,6 +41,7 @@ Previously ran on Vercel + Supabase; moved to the home server in October 2026.
 | `DESIGN.md` | The design spec, plus the decisions made where it had gaps |
 | `server/index.js` | API + static file server |
 | `Schema.sql` | Database tables; run once on a fresh database |
+| `mobile/` | The Android app (Flutter), its tests and release setup; not part of the deploy |
 | `scripts/import-from-supabase.sh` | One-time copy of data from the old Supabase project (already done) |
 | `.env.example` | Template for `.env` (holds `DATABASE_URL`; never committed) |
 
@@ -50,15 +51,24 @@ All requests and responses are JSON.
 
 | Method | Path | Does |
 |---|---|---|
-| GET | `/api/data` | All projects (each with `categoryIds`) and all categories |
-| POST | `/api/projects` | Create a project (fields + optional `categoryIds`) |
-| PATCH | `/api/projects/:id` | Update any fields; if `categoryIds` is sent, replaces the project's categories |
-| DELETE | `/api/projects/:id` | Delete a project |
+| GET | `/api/data` | All projects (each with `categoryIds`), all categories, and `serverTime` |
+| POST | `/api/projects` | Create a project (fields + optional `categoryIds`); 410 if that id was deleted |
+| PATCH | `/api/projects/:id` | Update fields; `categoryIds` replaces the set, or `addCategoryIds` / `removeCategoryIds` change it; 410 if deleted |
+| DELETE | `/api/projects/:id` | Delete a project (and remember its id) |
 | POST | `/api/categories` | Create a category (`{ name }`) |
 | PATCH | `/api/categories/:id` | Rename a category |
 | DELETE | `/api/categories/:id` | Delete a category (projects stay, the link is removed) |
 
+**Late changes.** Each field and category link remembers when it was last edited
+(`field_times`). A request may say when its edit was made (`editedAt`, ms on the server's clock);
+it then only changes fields it is newer than, so a phone that was offline can't undo newer
+edits. Requests without it (the web app's) count as made when they arrive. Links to deleted
+categories are dropped rather than refusing the change.
+
 ## Phone app and offline
+
+The Android app in `mobile/` replaces the installed PWA; see [mobile/README.md](mobile/README.md).
+
 
 The site can be installed from the browser (Add to Home Screen) and has a phone layout under 900px wide.
 
