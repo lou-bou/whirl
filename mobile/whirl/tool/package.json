@@ -1,0 +1,10 @@
+{
+  "name": "whirl-mobile-tools",
+  "private": true,
+  "type": "module",
+  "description": "Records what server/index.js answers, for the phone app's fake server (see record_server.mjs).",
+  "dependencies": {
+    "@electric-sql/pglite": "0.5.16",
+    "@electric-sql/pglite-socket": "0.2.19"
+  }
+}

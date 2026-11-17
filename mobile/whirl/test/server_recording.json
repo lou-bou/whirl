@@ -1,0 +1,1349 @@
+{
+ "steps": [
+  {
+   "request": {
+    "method": "GET",
+    "path": "/api/data"
+   },
+   "response": {
+    "status": 200,
+    "body": {
+     "categories": [],
+     "projects": [],
+     "serverTime": "<now>"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "GET",
+    "path": "/api/nothing-here"
+   },
+   "response": {
+    "status": 404,
+    "body": {
+     "error": "not found"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "POST",
+    "path": "/api/categories",
+    "body": {
+     "name": "games"
+    }
+   },
+   "response": {
+    "status": 201,
+    "body": {
+     "created_at": "<time>",
+     "id": "{cat:games}",
+     "name": "games"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "POST",
+    "path": "/api/categories",
+    "body": {
+     "name": "web"
+    }
+   },
+   "response": {
+    "status": 201,
+    "body": {
+     "created_at": "<time>",
+     "id": "{cat:web}",
+     "name": "web"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "POST",
+    "path": "/api/categories",
+    "body": {
+     "name": "tools"
+    }
+   },
+   "response": {
+    "status": 201,
+    "body": {
+     "created_at": "<time>",
+     "id": "{cat:tools}",
+     "name": "tools"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "POST",
+    "path": "/api/categories",
+    "body": {
+     "name": "web"
+    }
+   },
+   "response": {
+    "status": 409,
+    "body": {
+     "error": "that name is already taken"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "POST",
+    "path": "/api/categories",
+    "body": {}
+   },
+   "response": {
+    "status": 400,
+    "body": {
+     "error": "a required field is missing"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/categories/{cat:tools}",
+    "body": {
+     "name": "tooling"
+    }
+   },
+   "response": {
+    "status": 204,
+    "body": null
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/categories/{cat:tools}",
+    "body": {
+     "name": "games"
+    }
+   },
+   "response": {
+    "status": 409,
+    "body": {
+     "error": "that name is already taken"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/categories/{cat:tools}",
+    "body": {
+     "name": null
+    }
+   },
+   "response": {
+    "status": 400,
+    "body": {
+     "error": "a required field is missing"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/categories/99999999-9999-4999-8999-999999999999",
+    "body": {
+     "name": "ghost"
+    }
+   },
+   "response": {
+    "status": 204,
+    "body": null
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/categories/not-a-uuid",
+    "body": {
+     "name": "ghost"
+    }
+   },
+   "response": {
+    "status": 400,
+    "body": {
+     "error": "a field has an invalid value"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "POST",
+    "path": "/api/projects",
+    "body": {
+     "id": "11111111-1111-4111-8111-111111111111",
+     "name": "alpha",
+     "difficulty": "Easy",
+     "status": "idea",
+     "categoryIds": [
+      "{cat:web}"
+     ]
+    }
+   },
+   "response": {
+    "status": 201,
+    "body": {
+     "categoryIds": [
+      "{cat:web}"
+     ],
+     "created_at": "<time>",
+     "description": null,
+     "dev_type": "Assisted",
+     "difficulty": "Easy",
+     "has_content": false,
+     "id": "11111111-1111-4111-8111-111111111111",
+     "link": null,
+     "name": "alpha",
+     "notes": null,
+     "status": "idea",
+     "updated_at": "<time>"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "POST",
+    "path": "/api/projects",
+    "body": {
+     "id": "11111111-1111-4111-8111-111111111111",
+     "name": "alpha",
+     "difficulty": "Easy",
+     "status": "idea",
+     "categoryIds": [
+      "{cat:web}"
+     ]
+    }
+   },
+   "response": {
+    "status": 200,
+    "body": {
+     "id": "11111111-1111-4111-8111-111111111111"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "POST",
+    "path": "/api/projects",
+    "body": {
+     "id": "22222222-2222-4222-8222-222222222222",
+     "name": "bravo",
+     "description": "**Big** idea",
+     "dev_type": "Manual",
+     "link": "https://example.com",
+     "has_content": true,
+     "notes": "n",
+     "categoryIds": [
+      "{cat:games}",
+      "99999999-9999-4999-8999-999999999999"
+     ],
+     "editedAt": {
+      "$ago": 1200000
+     }
+    }
+   },
+   "response": {
+    "status": 201,
+    "body": {
+     "categoryIds": [
+      "{cat:games}"
+     ],
+     "created_at": "<time>",
+     "description": "**Big** idea",
+     "dev_type": "Manual",
+     "difficulty": "Medium",
+     "has_content": true,
+     "id": "22222222-2222-4222-8222-222222222222",
+     "link": "https://example.com",
+     "name": "bravo",
+     "notes": "n",
+     "status": "idea",
+     "updated_at": "<time>"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "POST",
+    "path": "/api/projects",
+    "body": {
+     "id": "33333333-3333-4333-8333-333333333333",
+     "name": "charlie",
+     "difficulty": "Impossible",
+     "editedAt": {
+      "$ago": 60000
+     }
+    }
+   },
+   "response": {
+    "status": 400,
+    "body": {
+     "error": "a field has an invalid value"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "POST",
+    "path": "/api/projects",
+    "body": {
+     "id": "33333333-3333-4333-8333-333333333333",
+     "description": "no name",
+     "editedAt": {
+      "$ago": 60000
+     }
+    }
+   },
+   "response": {
+    "status": 400,
+    "body": {
+     "error": "a required field is missing"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "POST",
+    "path": "/api/projects",
+    "body": {
+     "id": "33333333-3333-4333-8333-333333333333",
+     "name": null,
+     "difficulty": "Impossible"
+    }
+   },
+   "response": {
+    "status": 400,
+    "body": {
+     "error": "a required field is missing"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "POST",
+    "path": "/api/projects",
+    "body": {
+     "id": "not-a-uuid",
+     "name": "x"
+    }
+   },
+   "response": {
+    "status": 400,
+    "body": {
+     "error": "a field has an invalid value"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "POST",
+    "path": "/api/projects",
+    "body": {
+     "id": "33333333-3333-4333-8333-333333333333",
+     "name": "charlie",
+     "has_content": "maybe"
+    }
+   },
+   "response": {
+    "status": 400,
+    "body": {
+     "error": "a field has an invalid value"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "POST",
+    "path": "/api/projects",
+    "body": {
+     "id": "33333333-3333-4333-8333-333333333333",
+     "name": "charlie",
+     "editedAt": "soon"
+    }
+   },
+   "response": {
+    "status": 400,
+    "body": {
+     "error": "a field has an invalid value"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "POST",
+    "path": "/api/projects",
+    "body": {
+     "id": "33333333-3333-4333-8333-333333333333",
+     "name": "charlie",
+     "categoryIds": "web"
+    }
+   },
+   "response": {
+    "status": 400,
+    "body": {
+     "error": "a field has an invalid value"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "POST",
+    "path": "/api/projects",
+    "body": {
+     "id": "33333333-3333-4333-8333-333333333333",
+     "name": "charlie",
+     "categoryIds": [
+      "not-a-uuid"
+     ]
+    }
+   },
+   "response": {
+    "status": 400,
+    "body": {
+     "error": "a field has an invalid value"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "POST",
+    "path": "/api/projects",
+    "body": {
+     "id": "22222222-2222-4222-8222-222222222222",
+     "name": "bravo again",
+     "difficulty": "Impossible"
+    }
+   },
+   "response": {
+    "status": 400,
+    "body": {
+     "error": "a field has an invalid value"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "POST",
+    "path": "/api/projects",
+    "body": {
+     "id": "33333333-3333-4333-8333-333333333333",
+     "name": "charlie",
+     "has_content": "yes",
+     "status": "doing",
+     "editedAt": {
+      "$ahead": 3600000
+     }
+    }
+   },
+   "response": {
+    "status": 201,
+    "body": {
+     "categoryIds": [],
+     "created_at": "<time>",
+     "description": null,
+     "dev_type": "Assisted",
+     "difficulty": "Medium",
+     "has_content": true,
+     "id": "33333333-3333-4333-8333-333333333333",
+     "link": null,
+     "name": "charlie",
+     "notes": null,
+     "status": "doing",
+     "updated_at": "<time>"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/11111111-1111-4111-8111-111111111111",
+    "body": {
+     "name": "alpha two"
+    }
+   },
+   "response": {
+    "status": 204,
+    "body": null
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/11111111-1111-4111-8111-111111111111",
+    "body": {
+     "name": "alpha old",
+     "editedAt": {
+      "$ago": 600000
+     }
+    }
+   },
+   "response": {
+    "status": 204,
+    "body": null
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/22222222-2222-4222-8222-222222222222",
+    "body": {
+     "status": "doing",
+     "editedAt": {
+      "$ago": 600000
+     }
+    }
+   },
+   "response": {
+    "status": 204,
+    "body": null
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/22222222-2222-4222-8222-222222222222",
+    "body": {
+     "status": "completed",
+     "difficulty": "Hard",
+     "editedAt": {
+      "$ago": 900000
+     }
+    }
+   },
+   "response": {
+    "status": 204,
+    "body": null
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/22222222-2222-4222-8222-222222222222",
+    "body": {
+     "status": "doing",
+     "editedAt": {
+      "$ago": 600000
+     }
+    }
+   },
+   "response": {
+    "status": 204,
+    "body": null
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/22222222-2222-4222-8222-222222222222",
+    "body": {
+     "notes": "from the future",
+     "editedAt": {
+      "$ahead": 3600000
+     }
+    }
+   },
+   "response": {
+    "status": 204,
+    "body": null
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/22222222-2222-4222-8222-222222222222",
+    "body": {
+     "notes": "later, from the web"
+    }
+   },
+   "response": {
+    "status": 204,
+    "body": null
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/22222222-2222-4222-8222-222222222222",
+    "body": {
+     "name": "bravo",
+     "description": null,
+     "link": null
+    }
+   },
+   "response": {
+    "status": 204,
+    "body": null
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/22222222-2222-4222-8222-222222222222",
+    "body": {}
+   },
+   "response": {
+    "status": 204,
+    "body": null
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/22222222-2222-4222-8222-222222222222",
+    "body": {
+     "name": "too old",
+     "editedAt": {
+      "$ago": 1800000
+     }
+    }
+   },
+   "response": {
+    "status": 204,
+    "body": null
+   }
+  },
+  {
+   "request": {
+    "method": "GET",
+    "path": "/api/data"
+   },
+   "response": {
+    "status": 200,
+    "body": {
+     "categories": [
+      {
+       "created_at": "<time>",
+       "id": "{cat:games}",
+       "name": "games"
+      },
+      {
+       "created_at": "<time>",
+       "id": "{cat:tools}",
+       "name": "tooling"
+      },
+      {
+       "created_at": "<time>",
+       "id": "{cat:web}",
+       "name": "web"
+      }
+     ],
+     "projects": [
+      {
+       "categoryIds": [
+        "{cat:web}"
+       ],
+       "created_at": "<time>",
+       "description": null,
+       "dev_type": "Assisted",
+       "difficulty": "Easy",
+       "has_content": false,
+       "id": "11111111-1111-4111-8111-111111111111",
+       "link": null,
+       "name": "alpha two",
+       "notes": null,
+       "status": "idea",
+       "updated_at": "<time>"
+      },
+      {
+       "categoryIds": [
+        "{cat:games}"
+       ],
+       "created_at": "<time>",
+       "description": null,
+       "dev_type": "Manual",
+       "difficulty": "Hard",
+       "has_content": true,
+       "id": "22222222-2222-4222-8222-222222222222",
+       "link": null,
+       "name": "bravo",
+       "notes": "later, from the web",
+       "status": "doing",
+       "updated_at": "<time>"
+      },
+      {
+       "categoryIds": [],
+       "created_at": "<time>",
+       "description": null,
+       "dev_type": "Assisted",
+       "difficulty": "Medium",
+       "has_content": true,
+       "id": "33333333-3333-4333-8333-333333333333",
+       "link": null,
+       "name": "charlie",
+       "notes": null,
+       "status": "doing",
+       "updated_at": "<time>"
+      }
+     ],
+     "serverTime": "<now>"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/22222222-2222-4222-8222-222222222222",
+    "body": {
+     "addCategoryIds": [
+      "{cat:web}"
+     ],
+     "removeCategoryIds": [],
+     "categoryIds": [
+      "{cat:games}",
+      "{cat:web}"
+     ],
+     "editedAt": {
+      "$ago": 300000
+     }
+    }
+   },
+   "response": {
+    "status": 204,
+    "body": null
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/22222222-2222-4222-8222-222222222222",
+    "body": {
+     "addCategoryIds": [
+      "{cat:tools}"
+     ],
+     "removeCategoryIds": [
+      "{cat:games}"
+     ],
+     "categoryIds": [
+      "{cat:tools}"
+     ],
+     "editedAt": {
+      "$ago": 240000
+     }
+    }
+   },
+   "response": {
+    "status": 204,
+    "body": null
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/22222222-2222-4222-8222-222222222222",
+    "body": {
+     "addCategoryIds": [],
+     "removeCategoryIds": [
+      "{cat:web}"
+     ],
+     "editedAt": {
+      "$ago": 360000
+     }
+    }
+   },
+   "response": {
+    "status": 204,
+    "body": null
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/22222222-2222-4222-8222-222222222222",
+    "body": {
+     "addCategoryIds": [
+      "{cat:games}",
+      "99999999-9999-4999-8999-999999999999"
+     ],
+     "editedAt": {
+      "$ago": 300000
+     }
+    }
+   },
+   "response": {
+    "status": 204,
+    "body": null
+   }
+  },
+  {
+   "request": {
+    "method": "GET",
+    "path": "/api/data"
+   },
+   "response": {
+    "status": 200,
+    "body": {
+     "categories": [
+      {
+       "created_at": "<time>",
+       "id": "{cat:games}",
+       "name": "games"
+      },
+      {
+       "created_at": "<time>",
+       "id": "{cat:tools}",
+       "name": "tooling"
+      },
+      {
+       "created_at": "<time>",
+       "id": "{cat:web}",
+       "name": "web"
+      }
+     ],
+     "projects": [
+      {
+       "categoryIds": [
+        "{cat:web}"
+       ],
+       "created_at": "<time>",
+       "description": null,
+       "dev_type": "Assisted",
+       "difficulty": "Easy",
+       "has_content": false,
+       "id": "11111111-1111-4111-8111-111111111111",
+       "link": null,
+       "name": "alpha two",
+       "notes": null,
+       "status": "idea",
+       "updated_at": "<time>"
+      },
+      {
+       "categoryIds": [
+        "{cat:tools}",
+        "{cat:web}"
+       ],
+       "created_at": "<time>",
+       "description": null,
+       "dev_type": "Manual",
+       "difficulty": "Hard",
+       "has_content": true,
+       "id": "22222222-2222-4222-8222-222222222222",
+       "link": null,
+       "name": "bravo",
+       "notes": "later, from the web",
+       "status": "doing",
+       "updated_at": "<time>"
+      },
+      {
+       "categoryIds": [],
+       "created_at": "<time>",
+       "description": null,
+       "dev_type": "Assisted",
+       "difficulty": "Medium",
+       "has_content": true,
+       "id": "33333333-3333-4333-8333-333333333333",
+       "link": null,
+       "name": "charlie",
+       "notes": null,
+       "status": "doing",
+       "updated_at": "<time>"
+      }
+     ],
+     "serverTime": "<now>"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/22222222-2222-4222-8222-222222222222",
+    "body": {
+     "categoryIds": [
+      "{cat:games}",
+      "99999999-9999-4999-8999-999999999999"
+     ]
+    }
+   },
+   "response": {
+    "status": 204,
+    "body": null
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/11111111-1111-4111-8111-111111111111",
+    "body": {
+     "categoryIds": []
+    }
+   },
+   "response": {
+    "status": 204,
+    "body": null
+   }
+  },
+  {
+   "request": {
+    "method": "GET",
+    "path": "/api/data"
+   },
+   "response": {
+    "status": 200,
+    "body": {
+     "categories": [
+      {
+       "created_at": "<time>",
+       "id": "{cat:games}",
+       "name": "games"
+      },
+      {
+       "created_at": "<time>",
+       "id": "{cat:tools}",
+       "name": "tooling"
+      },
+      {
+       "created_at": "<time>",
+       "id": "{cat:web}",
+       "name": "web"
+      }
+     ],
+     "projects": [
+      {
+       "categoryIds": [],
+       "created_at": "<time>",
+       "description": null,
+       "dev_type": "Assisted",
+       "difficulty": "Easy",
+       "has_content": false,
+       "id": "11111111-1111-4111-8111-111111111111",
+       "link": null,
+       "name": "alpha two",
+       "notes": null,
+       "status": "idea",
+       "updated_at": "<time>"
+      },
+      {
+       "categoryIds": [
+        "{cat:games}"
+       ],
+       "created_at": "<time>",
+       "description": null,
+       "dev_type": "Manual",
+       "difficulty": "Hard",
+       "has_content": true,
+       "id": "22222222-2222-4222-8222-222222222222",
+       "link": null,
+       "name": "bravo",
+       "notes": "later, from the web",
+       "status": "doing",
+       "updated_at": "<time>"
+      },
+      {
+       "categoryIds": [],
+       "created_at": "<time>",
+       "description": null,
+       "dev_type": "Assisted",
+       "difficulty": "Medium",
+       "has_content": true,
+       "id": "33333333-3333-4333-8333-333333333333",
+       "link": null,
+       "name": "charlie",
+       "notes": null,
+       "status": "doing",
+       "updated_at": "<time>"
+      }
+     ],
+     "serverTime": "<now>"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/99999999-9999-4999-8999-999999999999",
+    "body": {
+     "name": "nobody"
+    }
+   },
+   "response": {
+    "status": 404,
+    "body": {
+     "error": "this project no longer exists"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/not-a-uuid",
+    "body": {
+     "name": "nobody"
+    }
+   },
+   "response": {
+    "status": 400,
+    "body": {
+     "error": "a field has an invalid value"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/11111111-1111-4111-8111-111111111111",
+    "body": {
+     "difficulty": "Nope"
+    }
+   },
+   "response": {
+    "status": 400,
+    "body": {
+     "error": "a field has an invalid value"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/11111111-1111-4111-8111-111111111111",
+    "body": {
+     "has_content": "maybe"
+    }
+   },
+   "response": {
+    "status": 400,
+    "body": {
+     "error": "a field has an invalid value"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/11111111-1111-4111-8111-111111111111",
+    "body": {
+     "name": null
+    }
+   },
+   "response": {
+    "status": 400,
+    "body": {
+     "error": "a required field is missing"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/11111111-1111-4111-8111-111111111111",
+    "body": {
+     "editedAt": "soon",
+     "name": "x"
+    }
+   },
+   "response": {
+    "status": 400,
+    "body": {
+     "error": "a field has an invalid value"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/11111111-1111-4111-8111-111111111111",
+    "body": {
+     "addCategoryIds": "web"
+    }
+   },
+   "response": {
+    "status": 400,
+    "body": {
+     "error": "a field has an invalid value"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/11111111-1111-4111-8111-111111111111",
+    "body": {
+     "addCategoryIds": [
+      "not-a-uuid"
+     ]
+    }
+   },
+   "response": {
+    "status": 400,
+    "body": {
+     "error": "a field has an invalid value"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/11111111-1111-4111-8111-111111111111",
+    "body": {
+     "name": "never",
+     "difficulty": "Nope"
+    }
+   },
+   "response": {
+    "status": 400,
+    "body": {
+     "error": "a field has an invalid value"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/11111111-1111-4111-8111-111111111111",
+    "body": {
+     "difficulty": "Nope",
+     "editedAt": {
+      "$ago": 3600000
+     }
+    }
+   },
+   "response": {
+    "status": 204,
+    "body": null
+   }
+  },
+  {
+   "request": {
+    "method": "DELETE",
+    "path": "/api/projects/44444444-4444-4444-8444-444444444444"
+   },
+   "response": {
+    "status": 204,
+    "body": null
+   }
+  },
+  {
+   "request": {
+    "method": "POST",
+    "path": "/api/projects",
+    "body": {
+     "id": "44444444-4444-4444-8444-444444444444",
+     "name": "delta",
+     "editedAt": {
+      "$ago": 120000
+     }
+    }
+   },
+   "response": {
+    "status": 410,
+    "body": {
+     "error": "this project was deleted on another device"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "DELETE",
+    "path": "/api/projects/11111111-1111-4111-8111-111111111111"
+   },
+   "response": {
+    "status": 204,
+    "body": null
+   }
+  },
+  {
+   "request": {
+    "method": "DELETE",
+    "path": "/api/projects/11111111-1111-4111-8111-111111111111"
+   },
+   "response": {
+    "status": 204,
+    "body": null
+   }
+  },
+  {
+   "request": {
+    "method": "PATCH",
+    "path": "/api/projects/11111111-1111-4111-8111-111111111111",
+    "body": {
+     "name": "edited after the delete",
+     "editedAt": {
+      "$ago": 60000
+     }
+    }
+   },
+   "response": {
+    "status": 410,
+    "body": {
+     "error": "this project was deleted on another device"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "POST",
+    "path": "/api/projects",
+    "body": {
+     "id": "11111111-1111-4111-8111-111111111111",
+     "name": "alpha",
+     "difficulty": "Easy"
+    }
+   },
+   "response": {
+    "status": 410,
+    "body": {
+     "error": "this project was deleted on another device"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "DELETE",
+    "path": "/api/projects/not-a-uuid"
+   },
+   "response": {
+    "status": 400,
+    "body": {
+     "error": "a field has an invalid value"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "DELETE",
+    "path": "/api/categories/{cat:games}"
+   },
+   "response": {
+    "status": 204,
+    "body": null
+   }
+  },
+  {
+   "request": {
+    "method": "DELETE",
+    "path": "/api/categories/{cat:games}"
+   },
+   "response": {
+    "status": 204,
+    "body": null
+   }
+  },
+  {
+   "request": {
+    "method": "DELETE",
+    "path": "/api/categories/not-a-uuid"
+   },
+   "response": {
+    "status": 400,
+    "body": {
+     "error": "a field has an invalid value"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "POST",
+    "path": "/api/projects",
+    "body": {
+     "id": "55555555-5555-4555-8555-555555555555",
+     "name": "echo",
+     "categoryIds": [
+      "{cat:games}",
+      "{cat:web}"
+     ],
+     "editedAt": {
+      "$ago": 60000
+     }
+    }
+   },
+   "response": {
+    "status": 201,
+    "body": {
+     "categoryIds": [
+      "{cat:web}"
+     ],
+     "created_at": "<time>",
+     "description": null,
+     "dev_type": "Assisted",
+     "difficulty": "Medium",
+     "has_content": false,
+     "id": "55555555-5555-4555-8555-555555555555",
+     "link": null,
+     "name": "echo",
+     "notes": null,
+     "status": "idea",
+     "updated_at": "<time>"
+    }
+   }
+  },
+  {
+   "request": {
+    "method": "GET",
+    "path": "/api/data"
+   },
+   "response": {
+    "status": 200,
+    "body": {
+     "categories": [
+      {
+       "created_at": "<time>",
+       "id": "{cat:tools}",
+       "name": "tooling"
+      },
+      {
+       "created_at": "<time>",
+       "id": "{cat:web}",
+       "name": "web"
+      }
+     ],
+     "projects": [
+      {
+       "categoryIds": [],
+       "created_at": "<time>",
+       "description": null,
+       "dev_type": "Manual",
+       "difficulty": "Hard",
+       "has_content": true,
+       "id": "22222222-2222-4222-8222-222222222222",
+       "link": null,
+       "name": "bravo",
+       "notes": "later, from the web",
+       "status": "doing",
+       "updated_at": "<time>"
+      },
+      {
+       "categoryIds": [],
+       "created_at": "<time>",
+       "description": null,
+       "dev_type": "Assisted",
+       "difficulty": "Medium",
+       "has_content": true,
+       "id": "33333333-3333-4333-8333-333333333333",
+       "link": null,
+       "name": "charlie",
+       "notes": null,
+       "status": "doing",
+       "updated_at": "<time>"
+      },
+      {
+       "categoryIds": [
+        "{cat:web}"
+       ],
+       "created_at": "<time>",
+       "description": null,
+       "dev_type": "Assisted",
+       "difficulty": "Medium",
+       "has_content": false,
+       "id": "55555555-5555-4555-8555-555555555555",
+       "link": null,
+       "name": "echo",
+       "notes": null,
+       "status": "idea",
+       "updated_at": "<time>"
+      }
+     ],
+     "serverTime": "<now>"
+    }
+   }
+  }
+ ]
+}

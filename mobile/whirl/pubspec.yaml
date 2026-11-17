@@ -1,0 +1,52 @@
+name: whirl
+description: Whirl for Android and iOS. Personal build, sideloaded, never published.
+publish_to: none
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.14.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  material_ui: ^1.11.1
+  cupertino_ui: ^1.1.7
+  flutter_riverpod: ^3.5.0
+  kit:
+    path: ../packages/kit
+  lucide_icons_flutter: ^4.0.3
+  dio: ^5.11.1
+  path_provider: ^2.1.6
+  sqflite: ^2.4.6
+  url_launcher: ^6.3.2
+  timezone: ^0.11.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  sqflite_common_ffi: ^2.3.6
+
+flutter:
+  uses-material-design: true
+  # Converted from public/fonts (woff2). Each font is two files, like the web app's: the Latin
+  # set and the Latin Extended set, which the theme uses as a fallback family.
+  fonts:
+    - family: BricolageGrotesque
+      fonts:
+        - asset: assets/fonts/BricolageGrotesque.ttf
+    - family: BricolageGrotesqueExt
+      fonts:
+        - asset: assets/fonts/BricolageGrotesqueExt.ttf
+    - family: DMSans
+      fonts:
+        - asset: assets/fonts/DMSans.ttf
+    - family: DMSansExt
+      fonts:
+        - asset: assets/fonts/DMSansExt.ttf
+    - family: JetBrainsMono
+      fonts:
+        - asset: assets/fonts/JetBrainsMono.ttf
+    - family: JetBrainsMonoExt
+      fonts:
+        - asset: assets/fonts/JetBrainsMonoExt.ttf
