@@ -21,6 +21,9 @@ create table projects (
   link text,
   has_content boolean not null default false,
   notes text,
+  -- When each field (and each category link, as "cat:<id>") was last edited, in ms. A change
+  -- older than a field's time leaves that field alone (see server/index.js).
+  field_times jsonb not null default '{}',
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
@@ -30,6 +33,12 @@ create table project_categories (
   project_id uuid references projects(id) on delete cascade,
   category_id uuid references categories(id) on delete cascade,
   primary key (project_id, category_id)
+);
+
+-- Deleted projects, so a create sent again by a device that was offline can't bring one back
+create table deleted_projects (
+  id uuid primary key,
+  deleted_at timestamptz not null default now()
 );
 
 -- Auto-update updated_at
